@@ -1,0 +1,52 @@
+services:
+  web:
+    hostname: web
+    build: 
+      context: .
+      dockerfile: Dockerfile.php
+    ports:
+      - "9999:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./output:/var/www/html/output
+    depends_on:
+      python-service:
+        condition: service_healthy
+    networks:
+      - tts-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  python-service:
+    hostname: python-service
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    volumes:
+      - ./src:/app
+      - ./output:/app/output
+      - ./logs:/app/logs
+    environment:
+      - PORT=5000
+      - MODEL_NAME=facebook/mms-tts
+      - OUTPUT_DIR=/app/output
+      - LOG_DIR=/app/logs
+    expose:
+      - "5000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - tts-network
+
+networks:
+  tts-network:
+    name: tts-network  
+    driver: bridge

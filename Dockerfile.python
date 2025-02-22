@@ -1,0 +1,32 @@
+FROM python:3.9-slim
+
+# Встановлення системних залежностей
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libsndfile1 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Встановлення робочої директорії
+WORKDIR /app
+
+# Копіювання файлу з залежностями
+COPY requirements.txt .
+
+# Встановлення Python залежностей
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Копіювання вихідного коду
+COPY src/ .
+
+# Створення необхідних директорій
+#RUN mkdir -p output logs
+
+RUN pip install huggingface_hub
+RUN python -c "from huggingface_hub import snapshot_download; snapshot_download('facebook/mms-tts-crh', local_dir='/src/models/mms-tts-crh')"
+
+# Додаємо скрипт для запуску
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]

@@ -1,0 +1,6 @@
+flask==2.3.2
+werkzeug>=2.2.0
+torch>=2.0.0
+transformers>=4.30.0
+soundfile>=0.12.1
+python-dotenv>=1.0.0
