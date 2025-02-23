@@ -4,9 +4,6 @@
  
  ![text-to-speech](doc/img/desktop.png)
 
-<audio controls>
-  <source src="doc/wav/result.wav" type="audio/wav">
-  Ваш браузер не підтримує вбудований аудіо-плеєр.
-</audio>
+ [Приклад звуку](doc/wav/result.wav)
 
- 
+  
