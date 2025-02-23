@@ -22,6 +22,7 @@ COPY src/ .
 # Створення необхідних директорій
 #RUN mkdir -p output logs
 
+# Скачуємо модельку локально
 RUN pip install huggingface_hub
 RUN python -c "from huggingface_hub import snapshot_download; snapshot_download('facebook/mms-tts-crh', local_dir='/src/models/mms-tts-crh')"
 
